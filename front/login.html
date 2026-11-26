@@ -6,119 +6,292 @@
 <title>Sign in · Periodic</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#e7e4df;--panel:#fff;--ink:#141210;--muted:#6b665f;--line:#d6d1c9;--soft:#f4f2ee;--brick:#c8371e}
+:root{
+  --ink:#0f1024;--muted:#6b6f8a;--line:#e4e6f2;--field:#f7f8fd;
+  --c1:#4f46e5;--c2:#7c3aed;--c3:#db2777;--c4:#06b6d4;
+  --grad:linear-gradient(120deg,var(--c1),var(--c2) 55%,var(--c3));
+}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:16px/1.55 "Schibsted Grotesk",system-ui,sans-serif;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
-/* left: brand side with a sample timetable sheet */
-.side{background:#141210;color:#ece8e2;padding:clamp(28px,5vw,64px);display:flex;flex-direction:column;justify-content:space-between;gap:40px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;color:#fff}
-.brand small{font-weight:500;color:#a39d94;font-size:14px}
-.side h1{font-size:clamp(30px,3.6vw,46px);line-height:1.05;font-weight:800;letter-spacing:-.02em;margin:0 0 14px;max-width:16ch}
-.side p{color:#a39d94;max-width:44ch;margin:0}
-.sheet{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;max-width:460px}
-.sheet span{height:34px;border-radius:5px;background:#24201d}
-.sheet .a{background:#c8371e}.sheet .b{background:#d9e4cf}.sheet .c{background:#d3dfea}.sheet .d{background:#efe0bb}.sheet .e{background:#e3d4e6}
-/* right: form */
-.main{display:flex;align-items:center;justify-content:center;padding:32px 20px}
-.card-l{width:100%;max-width:400px}
-.card-l h2{font-size:30px;font-weight:800;letter-spacing:-.015em;margin:0 0 6px}
-.form-label{font-size:14px;font-weight:600;margin-bottom:4px}
-.form-control{font-size:16px;min-height:48px;border-radius:6px;border-color:var(--line)}
-.form-control:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(200,55,30,.25)}
-.btn-brick{background:var(--brick);color:#fff;border:0;min-height:48px;font-weight:700;border-radius:6px}
-.btn-brick:hover,.btn-brick:focus{background:#a92d17;color:#fff}
-.pw{position:relative}.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--muted);font-size:14px;font-weight:600;padding:6px 8px}
-.err{display:none;font-size:14px;border-left:3px solid var(--brick);background:#fff;padding:8px 12px;margin-bottom:14px}
-.err.on{display:block}
-.demo{margin-top:26px;border-top:1px solid var(--line);padding-top:16px;font-size:14px;color:var(--muted)}
-.demo .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.demo button{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:6px 14px;font-weight:600;color:var(--ink);min-height:38px}
-.demo button:hover{border-color:var(--ink)}
-@media(max-width:860px){body{grid-template-columns:1fr}.side{gap:24px}.sheet{display:none}}
+body{margin:0;min-height:100vh;font:15px/1.55 "Plus Jakarta Sans",system-ui,sans-serif;color:var(--ink);background:#f3f4fb;overflow-x:hidden}
+
+/* ===== Hero band ===== */
+.hero{position:relative;overflow:hidden;color:#fff;padding:28px max(5vw,20px) 150px;background:#1e1b4b}
+.hero .mesh{position:absolute;inset:-20%;z-index:0;filter:blur(60px);opacity:.95}
+.hero .mesh i{position:absolute;border-radius:50%;display:block}
+.hero .mesh i:nth-child(1){width:55vw;height:55vw;left:-10%;top:-30%;background:#4f46e5}
+.hero .mesh i:nth-child(2){width:45vw;height:45vw;right:-5%;top:-25%;background:#db2777}
+.hero .mesh i:nth-child(3){width:40vw;height:40vw;left:35%;top:20%;background:#7c3aed}
+.hero .mesh i:nth-child(4){width:28vw;height:28vw;right:15%;bottom:-30%;background:#06b6d4;opacity:.75}
+.hero::after{content:"";position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:40px 40px;-webkit-mask-image:linear-gradient(180deg,#000,transparent 90%);mask-image:linear-gradient(180deg,#000,transparent 90%)}
+.hero>*{position:relative;z-index:1}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1180px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:19px;letter-spacing:-.01em}
+.brand .ic{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.95);display:grid;place-items:center;box-shadow:0 8px 24px -6px rgba(0,0,0,.35)}
+.pill{font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(8px)}
+.hero-in{max-width:1180px;margin:44px auto 0}
+.hero h1{font-size:clamp(32px,5vw,58px);line-height:1.04;font-weight:800;letter-spacing:-.035em;margin:0 0 14px;max-width:16ch;text-wrap:balance}
+.hero h1 span{background:linear-gradient(90deg,#fff,#c7d2fe 40%,#fbcfe8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:17px;color:rgba(255,255,255,.82);max-width:52ch;margin:0}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.chips span{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(8px)}
+.chips b{width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 0 4px rgba(52,211,153,.25)}
+
+/* ===== Card ===== */
+.wrap{display:flex;justify-content:center;padding:0 16px 48px;margin-top:-110px;position:relative;z-index:2}
+.card-x{width:100%;max-width:500px;background:rgba(255,255,255,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.95);border-radius:24px;padding:34px 34px 28px;box-shadow:0 30px 80px -24px rgba(49,46,129,.45),0 2px 6px rgba(15,16,36,.05)}
+.card-x h2{font-size:30px;font-weight:800;letter-spacing:-.03em;margin:0}
+.card-x .sub{color:var(--muted);margin:2px 0 22px}
+
+/* role segmented control with sliding indicator */
+.seg{position:relative;display:grid;grid-template-columns:repeat(3,1fr);background:#eef0fa;border-radius:16px;padding:5px;margin-bottom:24px}
+.seg .ind{position:absolute;top:5px;bottom:5px;left:5px;width:calc((100% - 10px)/3);border-radius:12px;background:var(--grad);box-shadow:0 8px 20px -6px rgba(124,58,237,.6);transition:transform .35s cubic-bezier(.3,1.3,.5,1)}
+.seg button{position:relative;z-index:1;border:0;background:none;height:46px;border-radius:12px;font-weight:700;font-size:15px;color:#4b4f6b;display:flex;align-items:center;justify-content:center;gap:8px;transition:color .2s}
+.seg button.on{color:#fff}
+.seg button:focus-visible{outline:2px solid var(--c2);outline-offset:2px}
+
+.field{margin-bottom:16px}
+.field label{display:block;font-size:14px;font-weight:600;margin-bottom:7px}
+.inp{position:relative}
+.inp>svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#9aa0bd;pointer-events:none;transition:color .15s}
+.inp input,.inp select{width:100%;height:52px;border:1.5px solid var(--line);background:var(--field);border-radius:14px;padding:0 46px;font-size:16px;color:var(--ink);font-family:inherit;transition:border-color .15s,box-shadow .15s,background .15s;-webkit-appearance:none;appearance:none}
+.inp select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%236b6f8a' stroke-width='2'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.inp input:focus,.inp select:focus{outline:0;background:#fff;border-color:var(--c2);box-shadow:0 0 0 4px rgba(124,58,237,.14)}
+.inp:focus-within>svg{color:var(--c2)}
+.inp input.bad{border-color:var(--c3);box-shadow:0 0 0 4px rgba(219,39,119,.12)}
+.eye{position:absolute;right:7px;top:50%;transform:translateY(-50%);border:0;background:none;color:#8a8fae;width:40px;height:40px;border-radius:10px;display:grid;place-items:center}
+.eye:hover,.eye.on{color:var(--c2);background:#f1edff}
+.slide{display:grid;grid-template-rows:1fr;transition:grid-template-rows .3s ease,opacity .3s}
+.slide>div{overflow:hidden}
+.slide.off{grid-template-rows:0fr;opacity:0}
+
+.row-x{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:2px 0 22px;font-size:14px;flex-wrap:wrap}
+.form-check-input{width:18px;height:18px;margin-top:.15em;cursor:pointer;border-color:#c9cce0}
+.form-check-input:checked{background-color:var(--c2);border-color:var(--c2)}
+.form-check-input:focus{box-shadow:0 0 0 4px rgba(124,58,237,.14);border-color:var(--c2)}
+.form-check-label{color:var(--muted);cursor:pointer}
+.lnk{border:0;background:none;padding:0;font-weight:700;font-size:14px;background-image:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lnk:hover{text-decoration:underline;text-decoration-color:var(--c2)}
+
+.btn-go{position:relative;overflow:hidden;width:100%;height:54px;border:0;border-radius:14px;background:var(--grad);background-size:200% 100%;color:#fff;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 14px 30px -10px rgba(124,58,237,.65);transition:background-position .5s,transform .15s,box-shadow .2s}
+.btn-go:hover{background-position:100% 0;box-shadow:0 18px 36px -10px rgba(219,39,119,.6)}
+.btn-go:active{transform:translateY(1px)}
+.btn-go:focus-visible{outline:3px solid rgba(124,58,237,.4);outline-offset:2px}
+.btn-go .arr{transition:transform .2s}.btn-go:hover .arr{transform:translateX(4px)}
+.btn-go::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg)}
+.btn-go:hover::after{animation:shine .8s}
+@keyframes shine{to{left:130%}}
+.btn-go .spin{width:18px;height:18px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:none}
+.btn-go.busy .spin{display:block}.btn-go.busy .arr{display:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+.alert-x{display:none;align-items:center;gap:10px;font-size:14px;font-weight:500;background:#fdf2f8;color:#9d174d;border:1px solid #fbcfe8;border-radius:14px;padding:11px 14px;margin-bottom:18px}
+.alert-x.on{display:flex;animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.ok-x{font-size:14px;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:14px;padding:12px 14px;margin-bottom:18px}
+.foot{text-align:center;color:var(--muted);font-size:14px;margin:20px 0 0}
+.back{margin-top:18px;display:inline-block}
+.view[hidden]{display:none}
+.legal{text-align:center;font-size:13px;color:var(--muted);padding:0 16px 28px}
+
+@media(max-width:520px){.hero{padding-bottom:130px}.hero-in{margin-top:30px}.pill{display:none}.card-x{padding:26px 18px 22px;border-radius:20px}.seg button{font-size:14px;gap:6px}.seg button svg{display:none}}
+@media(prefers-reduced-motion:no-preference){
+  .hero .mesh i{animation:float 14s ease-in-out infinite alternate}
+  .hero .mesh i:nth-child(2){animation-duration:17s}.hero .mesh i:nth-child(3){animation-duration:12s}.hero .mesh i:nth-child(4){animation-duration:19s}
+  @keyframes float{to{transform:translate(6vw,4vw) scale(1.15)}}
+  .card-x{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}@keyframes rise{from{opacity:0;transform:translateY(18px)}}
+}
+@media(prefers-reduced-motion:reduce){.seg .ind,.slide{transition:none}}
 </style>
 </head>
 <body>
-<aside class="side">
-  <div class="brand"><svg width="28" height="28" viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="24" height="24" rx="5" fill="#c8371e"/><g fill="#fff"><rect x="5" y="6" width="7" height="4" rx="1"/><rect x="14" y="6" width="7" height="4" rx="1" opacity=".55"/><rect x="5" y="12" width="7" height="4" rx="1" opacity=".55"/><rect x="14" y="12" width="7" height="4" rx="1"/><rect x="5" y="18" width="16" height="3" rx="1" opacity=".55"/></g></svg>Periodic <small>SNU Chennai</small></div>
-  <div>
-    <h1>Timetables and faculty workload, in one place.</h1>
-    <p>Schedule classes without clashes, track teaching hours and cover staff leave for every department.</p>
-  </div>
-  <div class="sheet" aria-hidden="true">
-    <span class="b"></span><span></span><span class="c"></span><span class="d"></span><span></span><span class="a"></span><span class="a"></span>
-    <span class="c"></span><span class="e"></span><span></span><span class="b"></span><span class="d"></span><span class="e"></span><span></span>
-    <span></span><span class="d"></span><span class="b"></span><span class="c"></span><span></span><span></span><span class="e"></span>
-    <span class="e"></span><span></span><span></span><span class="d"></span><span class="b"></span><span class="c"></span><span class="d"></span>
-  </div>
-</aside>
 
-<main class="main">
-  <form class="card-l" id="loginForm" novalidate>
-    <h2>Sign in</h2>
-    <p class="text-secondary mb-4">Use your Periodic account.</p>
-    <div class="err" id="err" role="alert">Incorrect user ID or password.</div>
-    <div class="mb-3">
-      <label class="form-label" for="uid">User ID</label>
-      <input class="form-control" id="uid" autocomplete="username" required autofocus>
-    </div>
-    <div class="mb-4">
-      <label class="form-label" for="pwd">Password</label>
-      <div class="pw"><input class="form-control" id="pwd" type="password" autocomplete="current-password" required><button type="button" id="toggle" aria-label="Show password">Show</button></div>
-    </div>
-    <button class="btn btn-brick w-100" type="submit">Log in</button>
-    <div class="demo">Demo accounts (fills the form):
-      <div class="chips"><button type="button" data-u="admin">Admin</button><button type="button" data-u="staff">Staff</button><button type="button" data-u="student">Student</button></div>
-    </div>
-  </form>
+<header class="hero">
+  <div class="mesh" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="top">
+    <div class="brand"><span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#g)" stroke-width="2.2" stroke-linecap="round"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4f46e5"/><stop offset="1" stop-color="#db2777"/></linearGradient></defs><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4M8.5 15l2.2 2.2 4.5-4.5"/></svg></span>Periodic</div>
+    <span class="pill">Shiv Nadar University Chennai</span>
+  </div>
+  <div class="hero-in">
+    <h1><span>Timetable &amp; Faculty Workload</span> Management System</h1>
+    <p>Organise class schedules and monitor teaching workload for every department.</p>
+    <div class="chips"><span><b></b>Clash-free timetables</span><span><b></b>Workload tracking</span><span><b></b>Leave &amp; cover</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="card-x">
+    <!-- SIGN IN -->
+    <section class="view" id="v-login">
+      <h2>Welcome back</h2>
+      <p class="sub">Choose your role and sign in to continue</p>
+
+      <div class="seg" role="tablist" aria-label="Sign in as">
+        <span class="ind" id="ind"></span>
+        <button type="button" role="tab" data-role="admin" class="on" aria-selected="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>Admin</button>
+        <button type="button" role="tab" data-role="faculty" aria-selected="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="10" r="2.5"/><path d="M8.5 17c.5-2 2-3 3.5-3s3 1 3.5 3"/></svg>Faculty</button>
+        <button type="button" role="tab" data-role="student" aria-selected="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>Student</button>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="alert-x" id="err" role="alert"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><span id="errText"></span></div>
+
+        <div class="field">
+          <label for="uid" id="uidLabel">Username</label>
+          <div class="inp"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.5-1.5 1.7-2 3-2s2.5.5 3 2M14 10h4M14 14h3"/></svg>
+          <input id="uid" autocomplete="username" required></div>
+        </div>
+
+        <div class="slide off" id="secWrap"><div>
+          <div class="field">
+            <label for="sec">Section</label>
+            <div class="inp"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z"/><path d="M8 7h6"/></svg>
+            <select id="sec"></select></div>
+          </div>
+        </div></div>
+
+        <div class="field">
+          <label for="pwd">Password</label>
+          <div class="inp"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <input id="pwd" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+          <button type="button" class="eye" id="eye" aria-label="Show password"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        </div>
+
+        <div class="row-x">
+          <div class="form-check m-0"><input class="form-check-input" type="checkbox" id="remember"><label class="form-check-label" for="remember">Remember me</label></div>
+          <button type="button" class="lnk" data-view="v-forgot-pwd">Forgot password?</button>
+        </div>
+
+        <button class="btn-go" type="submit" id="go"><span class="spin"></span><span>Sign in</span><svg class="arr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </form>
+      <p class="foot">Forgot your username? <button type="button" class="lnk" data-view="v-forgot-user">Recover it</button></p>
+    </section>
+
+    <!-- FORGOT PASSWORD -->
+    <section class="view" id="v-forgot-pwd" hidden>
+      <h2>Reset password</h2>
+      <p class="sub">Enter your username, staff ID or roll number. The request goes to the administrator.</p>
+      <form class="reset-form" novalidate>
+        <div class="field"><label for="fpId">Username / ID</label>
+          <div class="inp"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><input id="fpId" placeholder="e.g. 24CSE001" required></div></div>
+        <button class="btn-go" type="submit"><span>Request reset</span><svg class="arr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </form>
+      <button type="button" class="lnk back" data-view="v-login">← Back to sign in</button>
+    </section>
+
+    <!-- FORGOT USERNAME -->
+    <section class="view" id="v-forgot-user" hidden>
+      <h2>Find your username</h2>
+      <p class="sub">Enter the email registered with the university. The request goes to the administrator.</p>
+      <form class="reset-form" novalidate>
+        <div class="field"><label for="fuMail">Registered email</label>
+          <div class="inp"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><input id="fuMail" type="email" placeholder="name@snuchennai.edu.in" required></div></div>
+        <button class="btn-go" type="submit"><span>Request username</span><svg class="arr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </form>
+      <button type="button" class="lnk back" data-view="v-login">← Back to sign in</button>
+    </section>
+  </div>
 </main>
+<p class="legal">© Shiv Nadar University Chennai · School of Engineering</p>
 
 <script>
 {
-  // Hard-coded demo users (front-end only; replace with a real server login later)
+  // Hard-coded users for now (front-end only; move to a server later)
   const USERS = {
-    admin:   { password: 'admin',   role: 'Admin',   name: 'Administrator' },
-    staff:   { password: 'staff',   role: 'Staff',   name: 'Staff Member' },
-    student: { password: 'student', role: 'Student', name: 'Student' }
+    admin:   { password: 'admin',   role: 'admin',   label: 'Admin',   name: 'Administrator' },
+    staff:   { password: 'staff',   role: 'faculty', label: 'Faculty', name: 'Staff Member' },
+    student: { password: 'student', role: 'student', label: 'Student', name: 'Student' }
   };
+  const ROLES = {
+    admin:   { label: 'Username',          ph: 'Enter your username' },
+    faculty: { label: 'Staff ID / Username', ph: 'e.g. SNU-FAC-1042' },
+    student: { label: 'Roll number',       ph: 'e.g. 24CSE001' }
+  };
+  const SECTIONS = ['CSE II-A','CSE II-B','CSE II-C','ECE II-A','ECE II-B','ECE II-C','EEE II-A','EEE II-B','EEE II-C','MECH II-A','MECH II-B','MECH II-C','CIVIL II-A','CIVIL II-B','CIVIL II-C'];
+  const $ = s => document.querySelector(s);
+  let role = 'admin';
 
-  // Already logged in? Go straight to the home page
   try { if (sessionStorage.getItem('periodicUser')) location.replace('home.html'); } catch (e) {}
 
-  const form = document.getElementById('loginForm');
-  const uid = document.getElementById('uid');
-  const pwd = document.getElementById('pwd');
-  const err = document.getElementById('err');
+  $('#sec').innerHTML = SECTIONS.map(s => `<option>${s}</option>`).join('');
 
-  form.addEventListener('submit', ev => {
-    ev.preventDefault();
-    const id = uid.value.trim().toLowerCase();
-    const user = USERS[id];
-    if (!user || user.password !== pwd.value) {
-      err.classList.add('on');
-      pwd.value = '';
-      pwd.focus();
-      return;
-    }
-    try {
-      sessionStorage.setItem('periodicUser', JSON.stringify({ id, role: user.role, name: user.name }));
-    } catch (e) {}
-    location.href = 'home.html';   // all roles go to the home page for now
+  function setRole(r, focus) {
+    role = r;
+    const btns = [...document.querySelectorAll('.seg button')];
+    btns.forEach((b, i) => {
+      const on = b.dataset.role === r;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-selected', on);
+      if (on) $('#ind').style.transform = `translateX(${i * 100}%)`;
+    });
+    $('#uidLabel').textContent = ROLES[r].label;
+    $('#uid').placeholder = ROLES[r].ph;
+    $('#secWrap').classList.toggle('off', r !== 'student');
+    $('#sec').tabIndex = r === 'student' ? 0 : -1;
+    $('#err').classList.remove('on');
+    if (focus) $('#uid').focus();
+  }
+  document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => setRole(b.dataset.role, true)));
+  document.querySelector('.seg').addEventListener('keydown', e => {
+    const order = ['admin', 'faculty', 'student'], i = order.indexOf(role);
+    if (e.key === 'ArrowRight') { setRole(order[(i + 1) % 3]); document.querySelector(`[data-role=${role}]`).focus(); }
+    if (e.key === 'ArrowLeft')  { setRole(order[(i + 2) % 3]); document.querySelector(`[data-role=${role}]`).focus(); }
   });
 
-  [uid, pwd].forEach(i => i.addEventListener('input', () => err.classList.remove('on')));
+  // Remembered user
+  try {
+    const m = JSON.parse(localStorage.getItem('periodicRemember') || 'null');
+    if (m) { setRole(m.role); $('#uid').value = m.id; if (m.section) $('#sec').value = m.section; $('#remember').checked = true; }
+    else setRole('admin');
+  } catch (e) { setRole('admin'); }
 
-  document.getElementById('toggle').addEventListener('click', e => {
-    const show = pwd.type === 'password';
-    pwd.type = show ? 'text' : 'password';
-    e.target.textContent = show ? 'Hide' : 'Show';
-    e.target.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
-  });
-
-  document.querySelectorAll('[data-u]').forEach(b => b.addEventListener('click', () => {
-    uid.value = b.dataset.u; pwd.value = b.dataset.u; err.classList.remove('on');
+  // Views
+  document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.view').forEach(v => v.hidden = v.id !== b.dataset.view);
+    const v = document.getElementById(b.dataset.view);
+    v.querySelectorAll('.ok-x').forEach(n => n.remove());
+    v.querySelectorAll('.reset-form').forEach(f => { f.hidden = false; f.reset(); });
+    const first = v.querySelector('input'); if (first) first.focus();
   }));
+  document.querySelectorAll('.reset-form').forEach(f => f.addEventListener('submit', ev => {
+    ev.preventDefault();
+    const inp = f.querySelector('input');
+    if (!inp.value.trim()) { inp.classList.add('bad'); inp.focus(); return; }
+    inp.classList.remove('bad');
+    const msg = document.createElement('div');
+    msg.className = 'ok-x';
+    msg.textContent = 'Request noted. Email is not connected yet, so please contact the administrator to complete it.';
+    f.hidden = true; f.before(msg);
+  }));
+
+  $('#eye').addEventListener('click', () => {
+    const show = $('#pwd').type === 'password';
+    $('#pwd').type = show ? 'text' : 'password';
+    $('#eye').classList.toggle('on', show);
+    $('#eye').setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+  });
+
+  const fail = t => { $('#err').classList.remove('on'); void $('#err').offsetWidth; $('#errText').textContent = t; $('#err').classList.add('on'); };
+  ['#uid', '#pwd'].forEach(s => $(s).addEventListener('input', () => { $('#err').classList.remove('on'); $(s).classList.remove('bad'); }));
+
+  $('#loginForm').addEventListener('submit', ev => {
+    ev.preventDefault();
+    const id = $('#uid').value.trim().toLowerCase(), pw = $('#pwd').value;
+    if (!id || !pw) { if (!id) $('#uid').classList.add('bad'); if (!pw) $('#pwd').classList.add('bad'); return fail(`Enter your ${ROLES[role].label.toLowerCase()} and password.`); }
+    const user = USERS[id];
+    if (!user || user.password !== pw) { $('#pwd').value = ''; $('#pwd').focus(); return fail('Incorrect credentials. Please try again.'); }
+    if (user.role !== role) return fail(`This is a ${user.label} account. Switch to the ${user.label} tab to sign in.`);
+
+    const section = role === 'student' ? $('#sec').value : '';
+    try {
+      sessionStorage.setItem('periodicUser', JSON.stringify({ id, role: user.label, name: user.name, section }));
+      if ($('#remember').checked) localStorage.setItem('periodicRemember', JSON.stringify({ id, role, section }));
+      else localStorage.removeItem('periodicRemember');
+    } catch (e) {}
+    $('#go').classList.add('busy');
+    setTimeout(() => location.href = 'home.html', 500);   // all roles go to home for now
+  });
 }
 </script>
 </body>
