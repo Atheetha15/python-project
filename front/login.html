@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign in · Periodic</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e7e4df;--panel:#fff;--ink:#141210;--muted:#6b665f;--line:#d6d1c9;--soft:#f4f2ee;--brick:#c8371e}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:16px/1.55 "Schibsted Grotesk",system-ui,sans-serif;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+/* left: brand side with a sample timetable sheet */
+.side{background:#141210;color:#ece8e2;padding:clamp(28px,5vw,64px);display:flex;flex-direction:column;justify-content:space-between;gap:40px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;color:#fff}
+.brand small{font-weight:500;color:#a39d94;font-size:14px}
+.side h1{font-size:clamp(30px,3.6vw,46px);line-height:1.05;font-weight:800;letter-spacing:-.02em;margin:0 0 14px;max-width:16ch}
+.side p{color:#a39d94;max-width:44ch;margin:0}
+.sheet{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;max-width:460px}
+.sheet span{height:34px;border-radius:5px;background:#24201d}
+.sheet .a{background:#c8371e}.sheet .b{background:#d9e4cf}.sheet .c{background:#d3dfea}.sheet .d{background:#efe0bb}.sheet .e{background:#e3d4e6}
+/* right: form */
+.main{display:flex;align-items:center;justify-content:center;padding:32px 20px}
+.card-l{width:100%;max-width:400px}
+.card-l h2{font-size:30px;font-weight:800;letter-spacing:-.015em;margin:0 0 6px}
+.form-label{font-size:14px;font-weight:600;margin-bottom:4px}
+.form-control{font-size:16px;min-height:48px;border-radius:6px;border-color:var(--line)}
+.form-control:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(200,55,30,.25)}
+.btn-brick{background:var(--brick);color:#fff;border:0;min-height:48px;font-weight:700;border-radius:6px}
+.btn-brick:hover,.btn-brick:focus{background:#a92d17;color:#fff}
+.pw{position:relative}.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--muted);font-size:14px;font-weight:600;padding:6px 8px}
+.err{display:none;font-size:14px;border-left:3px solid var(--brick);background:#fff;padding:8px 12px;margin-bottom:14px}
+.err.on{display:block}
+.demo{margin-top:26px;border-top:1px solid var(--line);padding-top:16px;font-size:14px;color:var(--muted)}
+.demo .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.demo button{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:6px 14px;font-weight:600;color:var(--ink);min-height:38px}
+.demo button:hover{border-color:var(--ink)}
+@media(max-width:860px){body{grid-template-columns:1fr}.side{gap:24px}.sheet{display:none}}
+</style>
+</head>
+<body>
+<aside class="side">
+  <div class="brand"><svg width="28" height="28" viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="24" height="24" rx="5" fill="#c8371e"/><g fill="#fff"><rect x="5" y="6" width="7" height="4" rx="1"/><rect x="14" y="6" width="7" height="4" rx="1" opacity=".55"/><rect x="5" y="12" width="7" height="4" rx="1" opacity=".55"/><rect x="14" y="12" width="7" height="4" rx="1"/><rect x="5" y="18" width="16" height="3" rx="1" opacity=".55"/></g></svg>Periodic <small>SNU Chennai</small></div>
+  <div>
+    <h1>Timetables and faculty workload, in one place.</h1>
+    <p>Schedule classes without clashes, track teaching hours and cover staff leave for every department.</p>
+  </div>
+  <div class="sheet" aria-hidden="true">
+    <span class="b"></span><span></span><span class="c"></span><span class="d"></span><span></span><span class="a"></span><span class="a"></span>
+    <span class="c"></span><span class="e"></span><span></span><span class="b"></span><span class="d"></span><span class="e"></span><span></span>
+    <span></span><span class="d"></span><span class="b"></span><span class="c"></span><span></span><span></span><span class="e"></span>
+    <span class="e"></span><span></span><span></span><span class="d"></span><span class="b"></span><span class="c"></span><span class="d"></span>
+  </div>
+</aside>
+
+<main class="main">
+  <form class="card-l" id="loginForm" novalidate>
+    <h2>Sign in</h2>
+    <p class="text-secondary mb-4">Use your Periodic account.</p>
+    <div class="err" id="err" role="alert">Incorrect user ID or password.</div>
+    <div class="mb-3">
+      <label class="form-label" for="uid">User ID</label>
+      <input class="form-control" id="uid" autocomplete="username" required autofocus>
+    </div>
+    <div class="mb-4">
+      <label class="form-label" for="pwd">Password</label>
+      <div class="pw"><input class="form-control" id="pwd" type="password" autocomplete="current-password" required><button type="button" id="toggle" aria-label="Show password">Show</button></div>
+    </div>
+    <button class="btn btn-brick w-100" type="submit">Log in</button>
+    <div class="demo">Demo accounts (fills the form):
+      <div class="chips"><button type="button" data-u="admin">Admin</button><button type="button" data-u="staff">Staff</button><button type="button" data-u="student">Student</button></div>
+    </div>
+  </form>
+</main>
+
+<script>
+{
+  // Hard-coded demo users (front-end only; replace with a real server login later)
+  const USERS = {
+    admin:   { password: 'admin',   role: 'Admin',   name: 'Administrator' },
+    staff:   { password: 'staff',   role: 'Staff',   name: 'Staff Member' },
+    student: { password: 'student', role: 'Student', name: 'Student' }
+  };
+
+  // Already logged in? Go straight to the home page
+  try { if (sessionStorage.getItem('periodicUser')) location.replace('home.html'); } catch (e) {}
+
+  const form = document.getElementById('loginForm');
+  const uid = document.getElementById('uid');
+  const pwd = document.getElementById('pwd');
+  const err = document.getElementById('err');
+
+  form.addEventListener('submit', ev => {
+    ev.preventDefault();
+    const id = uid.value.trim().toLowerCase();
+    const user = USERS[id];
+    if (!user || user.password !== pwd.value) {
+      err.classList.add('on');
+      pwd.value = '';
+      pwd.focus();
+      return;
+    }
+    try {
+      sessionStorage.setItem('periodicUser', JSON.stringify({ id, role: user.role, name: user.name }));
+    } catch (e) {}
+    location.href = 'home.html';   // all roles go to the home page for now
+  });
+
+  [uid, pwd].forEach(i => i.addEventListener('input', () => err.classList.remove('on')));
+
+  document.getElementById('toggle').addEventListener('click', e => {
+    const show = pwd.type === 'password';
+    pwd.type = show ? 'text' : 'password';
+    e.target.textContent = show ? 'Hide' : 'Show';
+    e.target.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+  });
+
+  document.querySelectorAll('[data-u]').forEach(b => b.addEventListener('click', () => {
+    uid.value = b.dataset.u; pwd.value = b.dataset.u; err.classList.remove('on');
+  }));
+}
+</script>
+</body>
+</html>
